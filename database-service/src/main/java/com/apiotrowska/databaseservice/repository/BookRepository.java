@@ -12,7 +12,6 @@ import java.util.List;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-
     List<Book> findByTitleContainingOrAuthorContaining(String title, String author, Sort sort);
 
     Page<Book> findByTitleContainingOrAuthorContaining(String title, String author, Pageable pageable);

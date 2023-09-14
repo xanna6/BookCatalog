@@ -41,7 +41,6 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity handleGlobalException(Exception e) {
-        System.out.println(e.getMessage());
         return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
