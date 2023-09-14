@@ -138,7 +138,7 @@ public class BookControllerTests {
         });
 
         // when
-        String getBooksJson = mockMvc.perform(get("/api/data/all")
+        String getBooksJson = mockMvc.perform(get("/api/data")
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn()
                 .getResponse()
@@ -237,7 +237,7 @@ public class BookControllerTests {
         String filter = "3";
 
         // when
-        String getBooksJson = mockMvc.perform(get("/api/data/all")
+        String getBooksJson = mockMvc.perform(get("/api/data")
                 .param("filter", filter)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn()
@@ -311,7 +311,7 @@ public class BookControllerTests {
 
     @Test
     public void shouldDeleteBook() throws Exception {
-// given
+        // given
         String postRequest = "{\"title\":\"Title#1\",\"author\":\"Author#1\",\"publicationYear\":2001,\"pages\":201}";
 
         String json = mockMvc.perform(post("/api/data").content(postRequest)

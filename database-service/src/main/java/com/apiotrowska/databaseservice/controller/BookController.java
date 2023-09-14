@@ -19,31 +19,24 @@ public class BookController {
 
     private final BookService bookService;
 
-    @GetMapping("/all")
-    public ResponseEntity<List<BookResponse>> getAllBooks(@RequestParam(defaultValue = "id,asc") String[] sort,
-                                                          @RequestParam(required = false) String filter) {
-        List<BookResponse> books;
-        if (filter != null && filter.length() != 0) {
-            books = this.bookService.getFilteredBooks(filter, sort);
-        } else {
-            books = this.bookService.getAllBooks(sort);
-        }
-        if (books.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(books, HttpStatus.OK);
-    }
-
     @GetMapping
-    public ResponseEntity<List<BookResponse>> getAllBooksWithPagination(@RequestParam Integer offset,
-                                                                        @RequestParam Integer pageSize,
+    public ResponseEntity<List<BookResponse>> getAllBooksWithPagination(@RequestParam(required = false) Integer offset,
+                                                                        @RequestParam(required = false) Integer pageSize,
                                                                         @RequestParam(required = false) String filter,
                                                                         @RequestParam(defaultValue = "id,asc") String[] sort) {
         List<BookResponse> books;
-        if (filter != null && filter.length() != 0) {
-            books = this.bookService.getFilteredBooksWithPagination(offset, pageSize, filter, sort);
+        if (offset != null && pageSize != null) {
+            if (filter != null && filter.length() != 0) {
+                books = this.bookService.getFilteredBooksWithPagination(offset, pageSize, filter, sort);
+            } else {
+                books = this.bookService.getAllBooksWithPagination(offset, pageSize, sort);
+            }
         } else {
-            books = this.bookService.getAllBooksWithPagination(offset, pageSize, sort);
+            if (filter != null && filter.length() != 0) {
+                books = this.bookService.getFilteredBooks(filter, sort);
+            } else {
+                books = this.bookService.getAllBooks(sort);
+            }
         }
         if (books.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
