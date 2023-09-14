@@ -54,13 +54,6 @@
                     <target>16</target>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.liquibase</groupId>
-                <artifactId>liquibase-maven-plugin</artifactId>
-                <configuration>
-                    <propertyFile>liquibase.properties</propertyFile>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 </project>
