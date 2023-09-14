@@ -12,6 +12,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Book {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,8 +20,4 @@ public class Book {
     private String author;
     private int publicationYear;
     private int pages;
-
-    public Book(String title, String author, int publicationYear, int pages) {
-        this(null, title, author, publicationYear, pages);
-    }
 }
