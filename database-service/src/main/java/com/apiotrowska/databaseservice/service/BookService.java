@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -78,33 +77,27 @@ public class BookService {
     }
 
     public BookResponse getBookById(Long id) throws BookNotFoundException {
-        Optional<Book> bookData = this.bookRepository.findById(id);
-
-        if (bookData.isPresent()) {
-            return mapBookToBookResponse(bookData.get());
-        } else {
-            throw new BookNotFoundException("Not found Book with id = " + id);
-        }
+        return bookRepository.findById(id)
+                .map(book -> mapBookToBookResponse(book))
+                .orElseThrow(() -> new BookNotFoundException("Not found Book with id = " + id));
     }
 
     public BookResponse updateBook(Long id, BookRequest bookRequest) throws BookNotFoundException {
-        Optional<Book> bookData = this.bookRepository.findById(id);
-
-        if (bookData.isPresent()) {
-            Book book = bookData.get();
-            book.setTitle(bookRequest.getTitle());
-            book.setAuthor(bookRequest.getAuthor());
-            book.setPublicationYear(bookRequest.getPublicationYear());
-            book.setPages(bookRequest.getPages());
-
-            return mapBookToBookResponse(this.bookRepository.save(book));
-        } else {
-            throw new BookNotFoundException("Not found Book with id = " + id);
-        }
+        return bookRepository.findById(id)
+                .map(book -> setFieldsAndUpdateBookInDatabase(book, bookRequest))
+                .orElseThrow(() -> new BookNotFoundException("Not found Book with id = " + id));
     }
 
     public void deleteBook(Long id) {
         this.bookRepository.deleteById(id);
+    }
+
+    private BookResponse setFieldsAndUpdateBookInDatabase(Book book, BookRequest bookRequest) {
+        book.setTitle(bookRequest.getTitle());
+        book.setAuthor(bookRequest.getAuthor());
+        book.setPublicationYear(bookRequest.getPublicationYear());
+        book.setPages(bookRequest.getPages());
+        return mapBookToBookResponse(this.bookRepository.save(book));
     }
 
     private BookResponse mapBookToBookResponse(Book book) {
