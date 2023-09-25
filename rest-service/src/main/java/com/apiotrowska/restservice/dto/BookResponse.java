@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Year;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -14,6 +16,6 @@ public class BookResponse {
     private Long id;
     private String title;
     private String author;
-    private int publicationYear;
+    private Year publicationYear;
     private int pages;
 }

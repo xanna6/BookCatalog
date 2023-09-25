@@ -2,6 +2,8 @@ package com.apiotrowska.databaseservice.dto;
 
 import lombok.*;
 
+import java.time.Year;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -11,6 +13,6 @@ public class BookResponse {
     private Long id;
     private String title;
     private String author;
-    private int publicationYear;
+    private Year publicationYear;
     private int pages;
 }

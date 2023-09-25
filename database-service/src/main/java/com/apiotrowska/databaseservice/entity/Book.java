@@ -6,6 +6,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
+import java.time.Year;
+
 @Entity
 @Data
 @Builder
@@ -18,6 +20,6 @@ public class Book {
     private Long id;
     private String title;
     private String author;
-    private int publicationYear;
+    private Year publicationYear;
     private int pages;
 }
