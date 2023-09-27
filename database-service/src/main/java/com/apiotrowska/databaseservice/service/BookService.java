@@ -4,12 +4,16 @@ import com.apiotrowska.databaseservice.dto.BookRequest;
 import com.apiotrowska.databaseservice.dto.BookResponse;
 import com.apiotrowska.databaseservice.entity.Book;
 import com.apiotrowska.databaseservice.exception.BookNotFoundException;
+import com.apiotrowska.databaseservice.filter.BookFilter;
+import com.apiotrowska.databaseservice.filter.BookSpecificationBuilder;
 import com.apiotrowska.databaseservice.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @Slf4j
@@ -30,16 +34,17 @@ public class BookService {
         return mapBookToBookResponse(savedBook);
     }
 
-    public Page<BookResponse> getBooks(Pageable pageable, String filter) {
+    public Page<BookResponse> getBooks(List<BookFilter> filters, Pageable pageable) {
         log.info(String.valueOf(pageable));
-        Page<Book> books = this.bookRepository.findByTitleContainingOrAuthorContaining(filter, filter, pageable);
+        BookSpecificationBuilder builder = new BookSpecificationBuilder(filters);
+        Page<Book> books = this.bookRepository.findAll(builder.build(), pageable);
 
-        return books.map(book -> mapBookToBookResponse(book));
+        return books.map(this::mapBookToBookResponse);
     }
 
     public BookResponse getBookById(Long id) throws BookNotFoundException {
         return bookRepository.findById(id)
-                .map(book -> mapBookToBookResponse(book))
+                .map(this::mapBookToBookResponse)
                 .orElseThrow(() -> new BookNotFoundException("Not found Book with id = " + id));
     }
 

@@ -1,8 +1,6 @@
 package com.apiotrowska.restservice.controller;
 
-import com.apiotrowska.restservice.dto.BookRequest;
-import com.apiotrowska.restservice.dto.BookResponse;
-import com.apiotrowska.restservice.dto.RestPageImpl;
+import com.apiotrowska.restservice.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +26,7 @@ public class MainController {
     @GetMapping
     public ResponseEntity<RestPageImpl> getAllBooks(@RequestParam(required = false) Integer page,
                                                       @RequestParam(required = false) Integer size,
-                                                      @RequestParam(required = false) String filter,
+                                                      @ModelAttribute BookFilterDto bookFilterDto,
                                                       @RequestParam(defaultValue = "id,asc") String[] sort) {
 
         UriComponentsBuilder urlTemplate;
@@ -40,18 +38,19 @@ public class MainController {
             params.put("page", page.toString());
             params.put("size", size.toString());
         }
-        if (filter != null) {
-            urlTemplate.queryParam("filter", "{filter}");
-            params.put("filter", filter);
-        }
-        if (sort[0].contains(",")) {
-            for (int i = 1; i <= sort.length; i++) {
-                String sortOrder = sort[i - 1];
-                urlTemplate.queryParam("sort", "{sortOrder" + i + "}");
-                params.put("sortOrder" + i, sortOrder);
+        if (bookFilterDto != null && bookFilterDto.getBookFilters() != null) {
+            for (int i = 0; i < bookFilterDto.getBookFilters().size(); i++) {
+                BookFilter bookFilter = bookFilterDto.getBookFilters().get(i);
+                urlTemplate.queryParam("bookFilters[" + i + "].filterKey", "{bookFilters[" + i + "].filterKey}");
+                params.put("bookFilters[" + i + "].filterKey", bookFilter.getFilterKey());
+                urlTemplate.queryParam("bookFilters[" + i + "].value", "{bookFilters[" + i + "].value}");
+                params.put("bookFilters[" + i + "].value", String.valueOf(bookFilter.getValue()));
             }
-        } else {
-            urlTemplate.queryParam("sort", sort[1] + "," + sort[0]);
+        }
+        for (int i = 1; i <= sort.length; i++) {
+            String sortOrder = sort[i - 1];
+            urlTemplate.queryParam("sort", "{sortOrder" + i + "}");
+            params.put("sortOrder" + i, sortOrder);
         }
 
         String url = urlTemplate.encode().toUriString();

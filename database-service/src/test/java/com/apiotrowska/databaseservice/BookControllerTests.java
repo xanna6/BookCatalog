@@ -2,6 +2,7 @@ package com.apiotrowska.databaseservice;
 
 import com.apiotrowska.databaseservice.dto.BookResponse;
 import com.apiotrowska.databaseservice.dto.RestPageImpl;
+import com.apiotrowska.databaseservice.filter.BookFilter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
@@ -193,11 +194,12 @@ public class BookControllerTests {
             }
         });
 
-        String filter = "3";
+        BookFilter bookFilter = new BookFilter("title", "#3");
 
         // when
         String getBooksJson = mockMvc.perform(get("/api/data")
-                .param("filter", filter)
+                .param("bookFIlters[0].filterKey", bookFilter.getFilterKey())
+                .param("bookFIlters[0].value", (String) bookFilter.getValue())
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn()
                 .getResponse()

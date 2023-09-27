@@ -3,6 +3,7 @@ package com.apiotrowska.databaseservice.controller;
 import com.apiotrowska.databaseservice.dto.BookRequest;
 import com.apiotrowska.databaseservice.dto.BookResponse;
 import com.apiotrowska.databaseservice.exception.BookNotFoundException;
+import com.apiotrowska.databaseservice.filter.BookFilterDto;
 import com.apiotrowska.databaseservice.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +23,14 @@ public class BookController {
 
     @GetMapping
     public ResponseEntity<Page<BookResponse>> getAllBooks(Pageable pageable,
-                                                          @RequestParam(required = false, defaultValue = "") String filter) {
-        Page<BookResponse> books = this.bookService.getBooks(pageable, filter);
+                                                          @ModelAttribute BookFilterDto bookFilterDto) {
+
+        Page<BookResponse> books = this.bookService.getBooks(bookFilterDto.getBookFilters(), pageable);
 
         if (books.getContent().isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
