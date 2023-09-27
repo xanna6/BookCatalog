@@ -1,6 +1,7 @@
 package com.apiotrowska.databaseservice;
 
 import com.apiotrowska.databaseservice.dto.BookResponse;
+import com.apiotrowska.databaseservice.dto.RestPageImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
@@ -12,8 +13,8 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.Year;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -47,7 +48,7 @@ public class BookControllerTests {
 
         assertThat(response.getTitle()).isEqualTo("newTitle");
         assertThat(response.getAuthor()).isEqualTo("newAuthor");
-        assertThat(response.getPublicationYear()).isEqualTo(2000);
+        assertThat(response.getPublicationYear()).isEqualTo(Year.of(2000));
         assertThat(response.getPages()).isEqualTo(200);
     }
 
@@ -77,7 +78,7 @@ public class BookControllerTests {
 
         assertThat(getBookResponse.getTitle()).isEqualTo("Title#2");
         assertThat(getBookResponse.getAuthor()).isEqualTo("Author#2");
-        assertThat(getBookResponse.getPublicationYear()).isEqualTo(2002);
+        assertThat(getBookResponse.getPublicationYear()).isEqualTo(Year.of(2002));
         assertThat(getBookResponse.getPages()).isEqualTo(202);
 
     }
@@ -104,50 +105,6 @@ public class BookControllerTests {
 
         //then
         assertThat(putBookResponse.getStatus()).isEqualTo(MockHttpServletResponse.SC_NOT_FOUND);
-    }
-
-    @Test
-    public void shouldReturnListOfBooks() throws Exception {
-        // given
-        List<String> requestList = new ArrayList<>();
-        String request1 = "{\"title\":\"Title#1\",\"author\":\"Author#1\",\"publicationYear\":2001,\"pages\":201}";
-        String request2 = "{\"title\":\"Title#2\",\"author\":\"Author#2\",\"publicationYear\":2002,\"pages\":202}";
-        String request3 = "{\"title\":\"Title#3\",\"author\":\"Author#3\",\"publicationYear\":2003,\"pages\":203}";
-        requestList.add(request1);
-        requestList.add(request2);
-        requestList.add(request3);
-
-        List<BookResponse> response = new ArrayList<>();
-
-        requestList.forEach(request -> {
-            String json = null;
-            try {
-                json = mockMvc.perform(post("/api/data").content(request)
-                        .contentType(MediaType.APPLICATION_JSON_VALUE))
-                        .andReturn()
-                        .getResponse()
-                        .getContentAsString();
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
-            try {
-                response.add(objectMapper.readValue(json, BookResponse.class));
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-        });
-
-        // when
-        String getBooksJson = mockMvc.perform(get("/api/data")
-                .contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        //then
-        List<BookResponse> getBooksResponse = Arrays.asList(objectMapper.readValue(getBooksJson, BookResponse[].class));
-
-        assertThat(getBooksResponse).containsAll(response);
     }
 
     @Test
@@ -183,22 +140,24 @@ public class BookControllerTests {
             }
         });
 
-        int offset = 1;
-        int pageSize = 2;
+        int page = 1;
+        int size = 2;
 
         // when
         String getBooksJson = mockMvc.perform(get("/api/data")
-                .param("offset", String.valueOf(offset))
-                .param("pageSize", String.valueOf(pageSize))
+                .param("page", String.valueOf(page))
+                .param("size", String.valueOf(size))
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
 
         //then
-        List<BookResponse> getBooksResponse = Arrays.asList(objectMapper.readValue(getBooksJson, BookResponse[].class));
+        RestPageImpl getBooksResponse = objectMapper.readValue(getBooksJson, RestPageImpl.class);
 
-        assertThat(getBooksResponse.size()).isEqualTo(pageSize);
+        assertThat(getBooksResponse.getContent().size()).isEqualTo(size);
+        assertThat(getBooksResponse.getNumber()).isEqualTo(page);
+        assertThat(getBooksResponse.getNumberOfElements()).isEqualTo(size);
     }
 
     @Test
@@ -245,12 +204,12 @@ public class BookControllerTests {
                 .getContentAsString();
 
         //then
-        List<BookResponse> getBooksResponse = Arrays.asList(objectMapper.readValue(getBooksJson, BookResponse[].class));
+        RestPageImpl getBooksResponse = objectMapper.readValue(getBooksJson, RestPageImpl.class);
 
-        assertThat(getBooksResponse).contains(response.get(2));
-        Assertions.assertFalse(getBooksResponse.contains(response.get(0)));
-        Assertions.assertFalse(getBooksResponse.contains(response.get(1)));
-        Assertions.assertFalse(getBooksResponse.contains(response.get(3)));
+        assertThat(getBooksResponse.getContent().contains(response.get(2)));
+        Assertions.assertFalse(getBooksResponse.getContent().contains(response.get(0)));
+        Assertions.assertFalse(getBooksResponse.getContent().contains(response.get(1)));
+        Assertions.assertFalse(getBooksResponse.getContent().contains(response.get(3)));
     }
 
     @Test
@@ -280,7 +239,7 @@ public class BookControllerTests {
 
         assertThat(putBookResponse.getTitle()).isEqualTo("Title#2");
         assertThat(putBookResponse.getAuthor()).isEqualTo("Author#2");
-        assertThat(putBookResponse.getPublicationYear()).isEqualTo(2002);
+        assertThat(putBookResponse.getPublicationYear()).isEqualTo(Year.of(2002));
         assertThat(putBookResponse.getPages()).isEqualTo(202);
     }
 

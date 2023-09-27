@@ -2,6 +2,7 @@ package com.apiotrowska.restservice.controller;
 
 import com.apiotrowska.restservice.dto.BookRequest;
 import com.apiotrowska.restservice.dto.BookResponse;
+import com.apiotrowska.restservice.dto.RestPageImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,19 +26,19 @@ public class MainController {
     private String databaseServiceUrl;
 
     @GetMapping
-    public ResponseEntity<BookResponse[]> getAllBooks(@RequestParam(required = false) Integer offset,
-                                                      @RequestParam(required = false) Integer pageSize,
+    public ResponseEntity<RestPageImpl> getAllBooks(@RequestParam(required = false) Integer page,
+                                                      @RequestParam(required = false) Integer size,
                                                       @RequestParam(required = false) String filter,
                                                       @RequestParam(defaultValue = "id,asc") String[] sort) {
 
         UriComponentsBuilder urlTemplate;
         Map<String, String> params = new HashMap<>();
         urlTemplate = UriComponentsBuilder.fromHttpUrl(databaseServiceUrl);
-        if (offset != null && pageSize != null) {
-            urlTemplate.queryParam("offset", "{offset}")
-                    .queryParam("pageSize", "{pageSize}");
-            params.put("offset", offset.toString());
-            params.put("pageSize", pageSize.toString());
+        if (page != null && size != null) {
+            urlTemplate.queryParam("page", "{page}")
+                    .queryParam("size", "{size}");
+            params.put("page", page.toString());
+            params.put("size", size.toString());
         }
         if (filter != null) {
             urlTemplate.queryParam("filter", "{filter}");
@@ -56,7 +57,7 @@ public class MainController {
         String url = urlTemplate.encode().toUriString();
         log.info(url);
         log.info(params.toString());
-        ResponseEntity<BookResponse[]> listOfBooksResponse = restTemplate.getForEntity(url, BookResponse[].class, params);
+        ResponseEntity<RestPageImpl> listOfBooksResponse = restTemplate.getForEntity(url, RestPageImpl.class, params);
         return listOfBooksResponse;
     }
 
