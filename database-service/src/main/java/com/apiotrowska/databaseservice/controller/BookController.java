@@ -36,8 +36,8 @@ public class BookController {
 
     @GetMapping("/{id}")
     public ResponseEntity<BookResponse> getBookById(@PathVariable Long id) throws BookNotFoundException {
-            BookResponse book = this.bookService.getBookById(id);
-            return new ResponseEntity<>(book, HttpStatus.OK);
+        BookResponse book = this.bookService.getBookById(id);
+        return new ResponseEntity<>(book, HttpStatus.OK);
     }
 
     @PostMapping
@@ -52,8 +52,8 @@ public class BookController {
 
     @PutMapping("/{id}")
     public ResponseEntity<BookResponse> updateBook(@PathVariable Long id, @Valid @RequestBody BookRequest bookRequest) throws BookNotFoundException {
-            BookResponse bookAfterUpdate = this.bookService.updateBook(id, bookRequest);
-            return new ResponseEntity<>(bookAfterUpdate, HttpStatus.OK);
+        BookResponse bookAfterUpdate = this.bookService.updateBook(id, bookRequest);
+        return new ResponseEntity<>(bookAfterUpdate, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

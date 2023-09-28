@@ -14,26 +14,26 @@ public class BookSpecificationBuilder {
         this.filters = filters;
     }
 
-    public final BookSpecificationBuilder with(String key, Object value){
+    public final BookSpecificationBuilder with(String key, Object value) {
         filters.add(new BookFilter(key, value));
         return this;
     }
 
-    public final BookSpecificationBuilder with(BookFilter bookFilter){
+    public final BookSpecificationBuilder with(BookFilter bookFilter) {
         filters.add(bookFilter);
         return this;
     }
 
-    public Specification<Book> build(){
-        if(filters == null || filters.size() == 0){
+    public Specification<Book> build() {
+        if (filters == null || filters.size() == 0) {
             return null;
         }
 
         Specification<Book> result =
                 new BookSpecification(filters.get(0));
-        for (int idx = 1; idx < filters.size(); idx++){
+        for (int idx = 1; idx < filters.size(); idx++) {
             BookFilter criteria = filters.get(idx);
-            result =   Specification.where(result).and(new BookSpecification(criteria));
+            result = Specification.where(result).and(new BookSpecification(criteria));
         }
         return result;
     }
