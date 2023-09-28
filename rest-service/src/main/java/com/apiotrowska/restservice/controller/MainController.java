@@ -47,10 +47,15 @@ public class MainController {
                 params.put("bookFilters[" + i + "].value", String.valueOf(bookFilter.getValue()));
             }
         }
-        for (int i = 1; i <= sort.length; i++) {
-            String sortOrder = sort[i - 1];
-            urlTemplate.queryParam("sort", "{sortOrder" + i + "}");
-            params.put("sortOrder" + i, sortOrder);
+        if (sort[0].contains(",")) {
+            for (int i = 1; i <= sort.length; i++) {
+                String sortOrder = sort[i - 1];
+                urlTemplate.queryParam("sort", "{sortOrder" + i + "}");
+                params.put("sortOrder" + i, sortOrder);
+            }
+        } else {
+            urlTemplate.queryParam("sort", "{sort}");
+            params.put("sort", sort[0] + "," + sort[1]);
         }
 
         String url = urlTemplate.encode().toUriString();
