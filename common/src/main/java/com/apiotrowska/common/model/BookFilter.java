@@ -1,4 +1,4 @@
-package com.apiotrowska.restservice.dto;
+package com.apiotrowska.common.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

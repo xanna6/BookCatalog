@@ -1,11 +1,11 @@
 package com.apiotrowska.databaseservice.service;
 
-import com.apiotrowska.databaseservice.dto.BookRequest;
-import com.apiotrowska.databaseservice.dto.BookResponse;
+import com.apiotrowska.common.dto.BookRequest;
+import com.apiotrowska.common.dto.BookResponse;
+import com.apiotrowska.common.model.BookFilter;
 import com.apiotrowska.databaseservice.entity.Book;
 import com.apiotrowska.databaseservice.exception.BookNotFoundException;
-import com.apiotrowska.databaseservice.filter.BookFilter;
-import com.apiotrowska.databaseservice.filter.BookSpecificationBuilder;
+import com.apiotrowska.databaseservice.specification.BookSpecificationBuilder;
 import com.apiotrowska.databaseservice.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

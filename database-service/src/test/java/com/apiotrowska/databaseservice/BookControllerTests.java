@@ -1,8 +1,8 @@
 package com.apiotrowska.databaseservice;
 
-import com.apiotrowska.databaseservice.dto.BookResponse;
-import com.apiotrowska.databaseservice.dto.RestPageImpl;
-import com.apiotrowska.databaseservice.filter.BookFilter;
+import com.apiotrowska.common.dto.BookResponse;
+import com.apiotrowska.common.model.BookFilter;
+import com.apiotrowska.common.model.RestPageImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;

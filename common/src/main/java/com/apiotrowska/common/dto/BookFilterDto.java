@@ -1,5 +1,6 @@
-package com.apiotrowska.restservice.dto;
+package com.apiotrowska.common.dto;
 
+import com.apiotrowska.common.model.BookFilter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

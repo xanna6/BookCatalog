@@ -1,9 +1,9 @@
 package com.apiotrowska.databaseservice.controller;
 
-import com.apiotrowska.databaseservice.dto.BookRequest;
-import com.apiotrowska.databaseservice.dto.BookResponse;
+import com.apiotrowska.common.dto.BookFilterDto;
+import com.apiotrowska.common.dto.BookRequest;
+import com.apiotrowska.common.dto.BookResponse;
 import com.apiotrowska.databaseservice.exception.BookNotFoundException;
-import com.apiotrowska.databaseservice.filter.BookFilterDto;
 import com.apiotrowska.databaseservice.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

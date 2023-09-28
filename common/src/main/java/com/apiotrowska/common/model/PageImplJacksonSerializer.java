@@ -1,4 +1,4 @@
-package com.apiotrowska.databaseservice.dto;
+package com.apiotrowska.common.model;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -26,7 +26,7 @@ public class PageImplJacksonSerializer extends JsonSerializer<PageImpl<?>> {
         jsonGenerator.writeNumberField("size", page.getSize());
         jsonGenerator.writeNumberField("number", page.getNumber());
 
-        Sort sort = page.getSort();
+        Sort sort = page.getPageable().getSort();
 
         jsonGenerator.writeArrayFieldStart("sort");
 

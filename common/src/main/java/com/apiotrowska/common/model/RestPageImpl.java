@@ -1,4 +1,4 @@
-package com.apiotrowska.databaseservice.dto;
+package com.apiotrowska.common.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

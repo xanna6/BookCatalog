@@ -1,4 +1,4 @@
-package com.apiotrowska.restservice.dto;
+package com.apiotrowska.common.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.Year;
 
 @Data

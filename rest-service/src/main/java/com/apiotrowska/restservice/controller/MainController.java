@@ -1,6 +1,10 @@
 package com.apiotrowska.restservice.controller;
 
-import com.apiotrowska.restservice.dto.*;
+import com.apiotrowska.common.dto.BookFilterDto;
+import com.apiotrowska.common.dto.BookRequest;
+import com.apiotrowska.common.dto.BookResponse;
+import com.apiotrowska.common.model.BookFilter;
+import com.apiotrowska.common.model.RestPageImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,9 +29,9 @@ public class MainController {
 
     @GetMapping
     public ResponseEntity<RestPageImpl> getAllBooks(@RequestParam(required = false) Integer page,
-                                                      @RequestParam(required = false) Integer size,
-                                                      @ModelAttribute BookFilterDto bookFilterDto,
-                                                      @RequestParam(defaultValue = "id,asc") String[] sort) {
+                                                    @RequestParam(required = false) Integer size,
+                                                    @ModelAttribute BookFilterDto bookFilterDto,
+                                                    @RequestParam(defaultValue = "id,asc") String[] sort) {
 
         UriComponentsBuilder urlTemplate;
         Map<String, String> params = new HashMap<>();

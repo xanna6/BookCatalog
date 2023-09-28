@@ -1,5 +1,6 @@
-package com.apiotrowska.databaseservice.filter;
+package com.apiotrowska.databaseservice.specification;
 
+import com.apiotrowska.common.model.BookFilter;
 import com.apiotrowska.databaseservice.entity.Book;
 import org.springframework.data.jpa.domain.Specification;
 
