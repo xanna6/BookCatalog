@@ -17,16 +17,17 @@ BookCatalog is a microservice application using spring boot and spring cloud. Th
 
 GET method allows sorting, filtering and pagination. It accepts optional request params:
 
-* offset - page number to be returned
-* pageSize - number of records to be placed on page
-* filter - string that is searched for in the title and author
+* page - page number to be returned (if not provided, the default value 0 will be assumed)
+* size - number of records to be placed on page (if not provided, the default value 20 will be assumed)
+* BookFilterDto - list of BookFilter objects. BookFilter has 2 fields: filterKey (
+  a string that specifies by which column the data will be filtered) and value (string that is searched for in the specified column)
 * sort - array of strings, which have pattern: column,direction
 
 Sample queries:
 
 http://localhost:8080/api/books \
-http://localhost:8080/api/books?offset=1&pageSize=2&sort=title,desc \
-http://localhost:8080/api/books?offset=0&pageSize=2&filter=Java \
+http://localhost:8080/api/books?page=1&size=2&sort=title,desc \
+http://localhost:8080/api/books?page=0&size=2&&bookFilters%5B0%5D.filterKey=title&bookFilters%5B0%5D.value=Java \
 http://localhost:8080/api/books?sort=author,asc&sort=title,desc
 
 It is also possible to return a single record using request e.g., http://localhost:8080/api/books/2
